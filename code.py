@@ -81,3 +81,57 @@ total_data_df.drop(columns=['employee_office_id', 'employee_id', '_merge'],
 # Sort the <total_data_df> DataFrame by index
 
 total_data_df.sort_index(inplace=True)
+
+"""Stage 3: Get the insights
+
+Description
+
+The HR boss needs to know something about the employees.
+
+Objectives
+
+Find out the answers to the following questions:
+
+1 - What are the departments of the top ten employees in terms of working hours? 
+Output a Python list of values
+2 - What is the total number of projects on which IT department employees with 
+low salaries have worked? Output a number
+3 - What are the last evaluation scores and the satisfaction levels of the 
+employees A4, B7064, and A3033? Output a Python list where each entry is a list 
+of values of the last evaluation score and the satisfaction level of an 
+employee. The data for each employee should be specified in the same order as 
+the employees' IDs in this question.
+
+"""
+
+# Answer the question: What are the departments of the top ten employees in
+# terms of working hours?
+
+top_10_departments = \
+    total_data_df.sort_values('average_monthly_hours', ascending=False)[
+        'Department'].head(10).tolist()
+# Uncomment to print on the console
+# print(top_10_departments)
+
+# Answer the question: What is the total number of projects on which IT
+# department employees with low salaries have worked? Output a number
+
+low_salary_IT = total_data_df.query("salary == 'low' & Department == 'IT'")
+low_salary_IT_projects_sum = sum(low_salary_IT['number_project'].tolist())
+# Uncomment to print on the console
+# print(low_salary_IT_projects_sum)
+
+# Answer the question: What are the last evaluation scores and the
+# satisfaction levels of the employees A4, B7064, and A3033?
+
+required_employees = ['A4', 'B7064', 'A3033']
+final_list = []
+
+for employee in required_employees:
+    employee_list = []
+    employee_list.append(total_data_df.loc[employee, 'last_evaluation'])
+    employee_list.append(total_data_df.loc[employee, 'satisfaction_level'])
+    final_list.append(employee_list)
+
+# Uncomment to print on the console
+# print(final_list)
