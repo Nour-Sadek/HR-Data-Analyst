@@ -45,3 +45,39 @@ B_df.index = B_ids_list_strs
 # Re-indexing HR Office's Data Frame
 
 HR_df.index = HR_df["employee_id"].tolist()
+
+"""Stage 2: Merge everything
+
+Description
+
+Your datasets are ready for merging! It will make data analysis much more 
+straightforward.
+
+Objectives
+
+Use concatenation to generate a dataset with information from both offices. Use 
+the left merging by index to merge the previously created dataset with the HR's 
+dataset. When joining, generate a column containing information about where each 
+row came from. Keep only those columns that are present in both datasets.
+
+"""
+
+# Creating a unified data_set that merges both Office A's and B's DataFrames
+
+unified_df = pd.concat([A_df, B_df])
+
+# Merge this <unified_df> with that from HR, keeping only the data from the
+# employees included in the <unified_df> (HR doesn't have data for all the
+# employees)
+
+total_data_df = unified_df.merge(HR_df, indicator=True, left_index=True,
+                                 right_index=True)
+
+# Drop the "employee_office_id", "employee_id", and "_merge" columns
+
+total_data_df.drop(columns=['employee_office_id', 'employee_id', '_merge'],
+                   inplace=True)
+
+# Sort the <total_data_df> DataFrame by index
+
+total_data_df.sort_index(inplace=True)
