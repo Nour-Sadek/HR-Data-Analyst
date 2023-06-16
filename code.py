@@ -145,3 +145,74 @@ for employee in required_employees:
     final_list.append(employee_list)
 
 print(final_list)
+
+"""Stage 4: Aggregate the data
+
+Description
+
+The HR boss wants to delve into the metrics of the two employee groups: those 
+who left the company and those who still work for us. You decided to present the 
+information in a table.
+
+Objectives
+
+The HR boss asks for the following metrics for the two different groups (those 
+who left and those who are still working):
+
+1 - the median number of projects the employees in a group worked upon, and how 
+many employees worked on more than five projects
+2 - the mean and median time spent in the company
+3 - the share of employees who've had work accidents
+4 - the mean and standard deviation of the last evaluation score
+
+"""
+
+
+# Creating count_bigger_5 function that counts the number of employees who
+# worked on more than five projects to use in thw .agg() method
+
+def count_bigger_5(series) -> int:
+    """Returns the number of employees that have worked on more than 5
+    projects."""
+    more_than_5_bool = series > 5
+    return more_than_5_bool.sum()
+
+
+# Determining, in each group, the median number of projects the employees
+# worked on and how many employees worked on more than five projects
+number_project_df = total_data_df.groupby('left').agg(
+    {'number_project': ['median', count_bigger_5]}).round(2)
+
+# Determining, in each group, the mean and median time spent in the company
+
+time_spend_company_df = total_data_df.groupby('left').agg(
+    {'time_spend_company': ['mean', 'median']}).round(2)
+
+# Determining, in each group, the share of employees who've had work
+# accidents
+work_accident_df = total_data_df.groupby('left').agg(
+    {'Work_accident': ['mean']}).round(2)
+
+# Determining, in each group, the mean and standard deviation of the last
+# evaluation score
+last_evaluation_df = total_data_df.groupby('left').agg(
+    {'last_evaluation': ['mean', 'std']}).round(2)
+
+# Merging the 4 DataFrames <number_project_df>, <time_spend_company_df>,
+# <work_accident_df>, and <last_evaluation_df>
+
+merged_df = number_project_df.merge(time_spend_company_df,
+                                    left_index=True,
+                                    right_index=True).merge(
+    work_accident_df,
+    left_index=True,
+    right_index=True).merge(last_evaluation_df,
+                            left_index=True,
+                            right_index=True)
+
+print(merged_df)
+
+# Returning <merged_df> as a dictionary
+
+merged_as_dict = merged_df.to_dict()
+print(merged_as_dict)
