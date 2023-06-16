@@ -48,8 +48,11 @@ HR_df.index = HR_df["employee_id"].tolist()
 
 # Printing Office A, B, and HR data indexes
 
+print("Office A data's indexes:")
 print([index for index in A_df.index])
+print("Office B data's indexes:")
 print([index for index in B_df.index])
+print("HR Office data's indexes:")
 print([index for index in HR_df.index])
 
 """Stage 2: Merge everything
@@ -90,7 +93,9 @@ total_data_df.sort_index(inplace=True)
 
 # Printing out <total_data_df> index and column names
 
+print("The merged dataframe's indexes:")
 print([index for index in total_data_df.index])
+print("The merged dataframe's column names:")
 print([column for column in total_data_df.columns])
 
 """Stage 3: Get the insights
@@ -122,6 +127,8 @@ top_10_departments = \
     total_data_df.sort_values('average_monthly_hours', ascending=False)[
         'Department'].head(10).tolist()
 
+print("What are the departments of the top ten employees in terms of working \
+hours?")
 print(top_10_departments)
 
 # Answer the question: What is the total number of projects on which IT
@@ -130,6 +137,8 @@ print(top_10_departments)
 low_salary_IT = total_data_df.query("salary == 'low' & Department == 'IT'")
 low_salary_IT_projects_sum = sum(low_salary_IT['number_project'].tolist())
 
+print("What is the total number of projects on which IT department employees \
+with low salaries have worked?")
 print(low_salary_IT_projects_sum)
 
 # Answer the question: What are the last evaluation scores and the
@@ -144,6 +153,8 @@ for employee in required_employees:
     employee_list.append(total_data_df.loc[employee, 'satisfaction_level'])
     final_list.append(employee_list)
 
+print("What are the last evaluation scores and the satisfaction levels of the \
+employees A4, B7064, and A3033?")
 print(final_list)
 
 """Stage 4: Aggregate the data
@@ -210,11 +221,14 @@ merged_df = number_project_df.merge(time_spend_company_df,
                             left_index=True,
                             right_index=True)
 
+print("The dataframe with the required metrics after data aggregation:")
 print(merged_df)
 
 # Returning <merged_df> as a dictionary
 
 merged_as_dict = merged_df.to_dict()
+
+print("Dictionary form of the dataframe with the required data:")
 print(merged_as_dict)
 
 """Stage 5: Draw up pivot tables
@@ -277,6 +291,8 @@ first_pivot_table_filtered = df.loc[
             df[(1, 'low')] < df[(1, 'high')])]
 
 # Printing the required first pivot table as a DataFrame and as a dictionary
+
+print("The dataframe and dictionary form for the first required pivot table:")
 print(first_pivot_table_filtered)
 print(first_pivot_table_filtered.to_dict())
 
@@ -350,5 +366,6 @@ second_pivot_table = df.loc[(df[('mean', 'last_evaluation', 0)] > df[
 
 # Printing the required first pivot table as a DataFrame and as a dictionary
 
+print("The dataframe and dictionary form for the second required pivot table:")
 print(second_pivot_table)
 print(second_pivot_table.to_dict())
