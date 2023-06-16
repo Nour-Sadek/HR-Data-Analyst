@@ -216,3 +216,139 @@ print(merged_df)
 
 merged_as_dict = merged_df.to_dict()
 print(merged_as_dict)
+
+"""Stage 5: Draw up pivot tables
+
+Objectives
+
+The HR boss desperately needs your pivot tables for their report:
+
+1 - First pivot table:
+The first pivot table displays departments as rows, employees' current status, 
+and their salary level as columns. The values should be the median number of 
+monthly hours employees have worked.
+In the table, the HR boss wants to see only those departments where either one 
+is true:
+  - For the currently employed: the median value of the working hours of 
+    high-salary employees is smaller than the hours of the medium-salary employees, 
+    OR:
+  - For the employees who left: the median value of working hours of low-salary 
+    employees is smaller than the hours of high-salary employees
+
+2 - Second pivot table:
+The second pivot table is where each row is an employee's time in the company; 
+the columns indicate whether an employee has had any promotion. The values are 
+the last evaluation score's minimum, maximum, mean, and satisfaction level. 
+Filter the table by the following rule: select only those rows where the 
+previous mean evaluation score is higher for those without promotion than those 
+who had.
+
+"""
+
+"""Creating the first pivot table"""
+
+# Creating the data frame with the required columns and changing the
+# datatype of the 'left' column to float
+
+required_columns_df = total_data_df[
+    ['Department', 'left', 'salary', 'average_monthly_hours']]
+required_columns_df['left'] = required_columns_df['left'].astype(float)
+
+# Aggregating the data by applying the median function to
+# 'average_monthly_hours' column
+
+required_columns_df = required_columns_df.groupby(
+    ['salary', 'Department', 'left']).agg(
+    {'average_monthly_hours': 'median'})
+
+# Creating the required pivot table before any filtering
+
+first_pivot_table_unfiltered = required_columns_df.pivot_table(
+    index='Department',
+    columns=['left', 'salary'],
+    values='average_monthly_hours').round(2)
+
+# Creating a temporary short name for <first_pivot_table_unfiltered> for
+# readability, then filtering the pivot table according to the requirements
+
+df = first_pivot_table_unfiltered
+first_pivot_table_filtered = df.loc[
+    (df[(0, 'high')] < df[(0, 'medium')]) | (
+            df[(1, 'low')] < df[(1, 'high')])]
+
+# Printing the required first pivot table as a DataFrame and as a dictionary
+print(first_pivot_table_filtered)
+print(first_pivot_table_filtered.to_dict())
+
+"""Creating the second pivot table"""
+
+# Creating the data frame with the required columns
+
+required_columns_df = total_data_df[
+    ['last_evaluation', 'satisfaction_level', 'time_spend_company',
+     'promotion_last_5years']]
+
+
+# Creating the function that will create the three DataFrames to be merged
+
+
+def create_df(df: pd.DataFrame, action: str) -> pd.DataFrame:
+    """Return a pd.DataFrame with the required format where data have been
+    aggregated using the <action> function during pivoting from the originally
+    provided <df> == <required_columns_df>.
+
+    The outputted pd.DataFrame has the required column level names in the right
+    order.
+
+    """
+    last_evaluation_max = df.pivot_table(index='time_spend_company',
+                                         columns='promotion_last_5years',
+                                         values='last_evaluation',
+                                         aggfunc=action)
+    last_evaluation_max.columns.name = None
+    last_evaluation_max.index.name = None
+
+    satisfaction_level_max = df.pivot_table(index='time_spend_company',
+                                            columns='promotion_last_5years',
+                                            values='satisfaction_level',
+                                            aggfunc=action)
+    satisfaction_level_max.columns.name = None
+    satisfaction_level_max.index.name = None
+
+    concat_df = pd.concat([last_evaluation_max,
+                           satisfaction_level_max],
+                          axis=1,
+                          keys=['last-evaluation', 'satisfaction_level'])
+
+    concat_df.columns = pd.MultiIndex.from_product([[action],
+                                                    ['last_evaluation',
+                                                     'satisfaction_level'],
+                                                    [0, 1]])
+
+    return concat_df
+
+
+# Creating the three pivot tables to be merged
+
+max_df = create_df(required_columns_df, 'max')
+mean_df = create_df(required_columns_df, 'mean')
+min_df = create_df(required_columns_df, 'min')
+
+# Merging the three pivot tables
+
+second_pivot_table = max_df.merge(mean_df,
+                                  left_index=True,
+                                  right_index=True).merge(min_df,
+                                                          left_index=True,
+                                                          right_index=True)
+
+# Creating a temporary short name for <second_pivot_table> for readability,
+# then filtering the merged pivot table according to the requirements
+df = second_pivot_table
+second_pivot_table = df.loc[(df[('mean', 'last_evaluation', 0)] > df[
+    ('mean', 'last_evaluation', 1)])]
+
+# Printing the required first pivot table as a DataFrame and as a dictionary
+
+print(second_pivot_table)
+print(second_pivot_table.to_dict())
