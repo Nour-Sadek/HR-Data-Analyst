@@ -46,6 +46,12 @@ B_df.index = B_ids_list_strs
 
 HR_df.index = HR_df["employee_id"].tolist()
 
+# Printing Office A, B, and HR data indexes
+
+print([index for index in A_df.index])
+print([index for index in B_df.index])
+print([index for index in HR_df.index])
+
 """Stage 2: Merge everything
 
 Description
@@ -82,6 +88,11 @@ total_data_df.drop(columns=['employee_office_id', 'employee_id', '_merge'],
 
 total_data_df.sort_index(inplace=True)
 
+# Printing out <total_data_df> index and column names
+
+print([index for index in total_data_df.index])
+print([column for column in total_data_df.columns])
+
 """Stage 3: Get the insights
 
 Description
@@ -110,16 +121,16 @@ the employees' IDs in this question.
 top_10_departments = \
     total_data_df.sort_values('average_monthly_hours', ascending=False)[
         'Department'].head(10).tolist()
-# Uncomment to print on the console
-# print(top_10_departments)
+
+print(top_10_departments)
 
 # Answer the question: What is the total number of projects on which IT
 # department employees with low salaries have worked? Output a number
 
 low_salary_IT = total_data_df.query("salary == 'low' & Department == 'IT'")
 low_salary_IT_projects_sum = sum(low_salary_IT['number_project'].tolist())
-# Uncomment to print on the console
-# print(low_salary_IT_projects_sum)
+
+print(low_salary_IT_projects_sum)
 
 # Answer the question: What are the last evaluation scores and the
 # satisfaction levels of the employees A4, B7064, and A3033?
@@ -133,5 +144,4 @@ for employee in required_employees:
     employee_list.append(total_data_df.loc[employee, 'satisfaction_level'])
     final_list.append(employee_list)
 
-# Uncomment to print on the console
-# print(final_list)
+print(final_list)
