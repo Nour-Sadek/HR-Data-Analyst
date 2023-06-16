@@ -26,9 +26,9 @@ index.
 
 # Loading the data
 
-A_df = pd.read_xml("../Data/A_office_data.xml")
-B_df = pd.read_xml("../Data/B_office_data.xml")
-HR_df = pd.read_xml("../Data/hr_data.xml")
+A_df = pd.read_xml("./Data/A_office_data.xml")
+B_df = pd.read_xml("./Data/B_office_data.xml")
+HR_df = pd.read_xml("./Data/hr_data.xml")
 
 # Re-indexing Office A's Data Frame
 
