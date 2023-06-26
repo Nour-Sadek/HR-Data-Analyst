@@ -1,10 +1,5 @@
 # HR Data Analyst
 
-### Learning Outcomes:
-Conduct data analysis and handle a case that resembles the actual tasks a data 
-analyst may encounter at their job. Master data merging, grouping, aggregation 
-functions, and draw up pivot tables using the pandas functionality.
-
 ### About
 You work as an analyst in a company. The company's HR boss provided you with 
 three datasets. The first two contain information about employees' performance 
@@ -13,6 +8,18 @@ projects, departments, and so on. The third one is an extensive dataset with
 information on the employees' satisfaction with their jobs, their latest 
 evaluation metrics, and the current status in the company. Your task is to 
 analyze the data and answer some of the HR’s questions.
+
+### Learning Outcomes of the Project:
+Conduct data analysis and handle a case that resembles the actual tasks a data 
+analyst may encounter at their job. Master data merging, grouping, aggregation 
+functions, and draw up pivot tables using the pandas functionality.
+
+### Learning Outcomes of Each Stage of the Project:
+_Stage 1_ : Learn how to load data from the XML format, explore, and reindex it properly.
+_Stage 2_ : Practice how to merge several datasets into a big one.
+_Stage 3_ : Master the pandas methods to extract insights from the data.
+_Stage 4_ : Let's try aggregating Pandas DataFrames, which allows you to quickly find different metrics, such as the mean or standard deviation across other columns.
+_Stage 5_ : Explore how to generate pivot tables with Pandas in order to summarize data.
 
 # General Info
 
@@ -62,5 +69,3 @@ Download the files to your local repository and open the project in your choice
 IDE and run the project. The different data frames and their dictionary form will
 be printed on the console according to the requirements stated in each stage's
 docstring. Please read each Stage's docstring to know the requirements.
-
-
