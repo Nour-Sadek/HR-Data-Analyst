@@ -16,9 +16,13 @@ functions, and draw up pivot tables using the pandas functionality.
 
 ### Learning Outcomes of Each Stage of the Project:
 _Stage 1_ : Learn how to load data from the XML format, explore, and reindex it properly.
+
 _Stage 2_ : Practice how to merge several datasets into a big one.
+
 _Stage 3_ : Master the pandas methods to extract insights from the data.
+
 _Stage 4_ : Let's try aggregating Pandas DataFrames, which allows you to quickly find different metrics, such as the mean or standard deviation across other columns.
+
 _Stage 5_ : Explore how to generate pivot tables with Pandas in order to summarize data.
 
 # General Info
